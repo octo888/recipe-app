@@ -1,8 +1,9 @@
 import {Ingridient} from "../shared/ingrid.model";
-import {EventEmitter} from "@angular/core";
+import {Subject} from "rxjs";
 
 export class ShoppingListService {
-  ingridChanged = new EventEmitter<Ingridient[]>();
+  ingridChanged = new Subject<Ingridient[]>();
+  startedEdit = new Subject<number>();
 
   private ingridients: Ingridient[] = [
     new Ingridient('Apples', 5),
@@ -13,9 +14,13 @@ export class ShoppingListService {
     return this.ingridients.slice();
   }
 
+  getIngridient(index: number) {
+    return this.ingridients[index];
+  }
+
   addIng(ing: Ingridient) {
     this.ingridients.push(ing);
-    this.ingridChanged.emit(this.ingridients.slice());
+    this.ingridChanged.next(this.ingridients.slice());
   }
 
   addIngridients(ingrids: Ingridient[]) {
@@ -23,7 +28,17 @@ export class ShoppingListService {
       this.addIng(ing);
     }*/
     this.ingridients.push(...ingrids);
-    this.ingridChanged.emit(this.ingridients.slice());
+    this.ingridChanged.next(this.ingridients.slice());
+  }
+
+  updateIng(index: number, newIng: Ingridient) {
+    this.ingridients[index] = newIng;
+    this.ingridChanged.next(this.ingridients.slice());
+  }
+
+  deleteIng(index: number) {
+    this.ingridients.splice(index, 1);
+    this.ingridChanged.next(this.ingridients.slice());
   }
 
 }
