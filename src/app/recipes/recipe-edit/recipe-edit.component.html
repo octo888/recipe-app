@@ -4,8 +4,8 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success">Save</button>
-          <button type="submit" class="btn btn-danger">Cancel</button>
+          <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+          <button type="submit" class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
       </div>
 
@@ -22,14 +22,14 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="imgPath">Image URL</label>
-            <input type="text" id="imgPath" class="form-control" formControlName="imgPath">
+            <input type="text" id="imgPath" class="form-control" formControlName="imgPath" #imgPath>
           </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-xs-12">
-          <img src="" alt="" class="img-responsive">
+          <img [src]="imgPath.value" alt="" class="img-responsive" >
         </div>
       </div>
 
@@ -44,10 +44,9 @@
 
       <div class="row">
         <div class="col-xs-12" formArrayName="ingrids">
+          <div class="row" style="margin-top: 10px" *ngFor="let ingCtrl of recipeForm.get('ingrids').controls; let i = index" [formGroupName]="i">
 
-          <div class="row" *ngFor="let ingCtrl of recipeForm.get('ingrids').controls; let i = index" [formGroupName]="i">
-
-            <div class="col-xs-8">
+            <div class="col-xs-8" >
               <input type="text" class="form-control" formControlName="name">
             </div>
 
@@ -56,11 +55,15 @@
             </div>
 
             <div class="col-xs-2">
-              <button class="btn btn-danger">X</button>
+              <button class="btn btn-danger" type="button" (click)="onDeleteIng(i)">X</button>
             </div>
-
           </div>
-
+          <hr>
+          <div class="row">
+            <div class="col-xs-12">
+              <button type="button" class="btn btn-success" (click)="onAddIngrid()">Add Ingridient</button>
+            </div>
+          </div>
         </div>
       </div>
 
